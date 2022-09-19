@@ -129,3 +129,22 @@
 #         print()
         
 #     return HttpResponse('hello')
+
+
+
+# def index(request):
+#     obj = product_varient.objects.all().values('PRODUCT_ID','VARIENT_ID')
+#     for i in obj:
+#         p_id = i['PRODUCT_ID']
+#         v_id = i['VARIENT_ID']
+#         data = batch_account(
+#                             PRODUCT_ID = p_id,
+#                             VARIENT_ID = v_id,
+#                             BATCH_ID = 'BATCH1',
+#                             BATCH_STOCK = 15,
+#                             BATCH_NUMBER = 1,
+#         )
+#         data.save()
+#         print(p_id,v_id)
+    
+#     return HttpResponse('hello')
