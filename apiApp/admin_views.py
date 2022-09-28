@@ -18,6 +18,8 @@ from rest_framework.response import Response
 
 @api_view(['POST'])
 def adminProductList(request,format=None):
+    filter_data = (request.data)['data']
+    print('################',filter_data)
     product_list = product_view.objects.all()\
                                        .values('id')\
                                        .annotate(

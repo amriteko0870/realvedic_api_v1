@@ -123,7 +123,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ---------------------------------------------------------------------------------------------------------
+# ---------------------------------------  REST  ----------------------------------------------------
 
 ALLOWED_HOSTS = ALLOWED_HOSTS + ['*']
 INSTALLED_APPS = INSTALLED_APPS + ['apiApp','rest_framework','corsheaders',]
@@ -138,3 +138,17 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8081',
 )
+
+
+
+# ------------------------------------ swaggger -----------------------------------------------
+
+INSTALLED_APPS = INSTALLED_APPS + ['rest_framework_swagger','drf_yasg',]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'  # <-- Here
+}
