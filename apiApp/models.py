@@ -21,8 +21,10 @@ class product_view(models.Model):
     HOW_TO_USE = models.TextField()
     HOW_WE_MAKE_IT = models.TextField()
     NUTRITIONAL_INFO = models.TextField()
+    NUTRITIONAL_UNIT = models.TextField()
     SKU_CODE = models.CharField(max_length=300) #varient_level
     HSN_CODE = models.CharField(max_length=300) #product_level
+
 
 class product_varient(models.Model):
     PRODUCT_ID = models.CharField(max_length=300)
