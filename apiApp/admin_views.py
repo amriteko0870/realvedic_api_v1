@@ -60,7 +60,8 @@ def adminProductDetail(request):
                                             hsn = F('HSN_CODE'),
                                             sku = F('SKU_CODE'),
                                             varient_stock = F('VARIENT_STOCK'),
-                                            sibling = F('SIBLING_PRODUCT')
+                                            sibling = F('SIBLING_PRODUCT'),
+                                            images = F('IMAGES')
                                             )
     prod_df = pd.DataFrame(list(prod_obj))
     prod_df['size'] = prod_df['size'].str.split('|')
@@ -70,6 +71,7 @@ def adminProductDetail(request):
     prod_df['nut_unit'] = prod_df['nut_unit'].str.split('|')
     prod_df['sku'] = prod_df['sku'].str.split('|')
     prod_df['varient_stock'] = prod_df['varient_stock'].str.split('|')
+    prod_df['images'] = prod_df['images'].str.split('|')
 
     prod_df['benefits'] = prod_df['benefits'].str.replace('|',',',regex=True)
     prod_df['ingredients'] = prod_df['ingredients'].str.replace('|',',',regex=True)
@@ -80,6 +82,7 @@ def adminProductDetail(request):
 
     res = {}
     res['name'] = prod_df['name']
+    res['images'] = prod_df['images']
     res['status'] = 'In stock' if prod_df['stock']>0 else 'Out of stock'
     res['category'] = prod_df['category']
     res['hsn'] = prod_df['hsn']
@@ -96,12 +99,14 @@ def adminProductDetail(request):
         res['variants'] = varients
     sibling = list(product_view.objects.filter(PRODUCT_ID = prod_df['sibling'])\
                                  .annotate(
+                                            product_id = F('PRODUCT_ID'),
                                             name = F('PRODUCT_NAME'),
                                             price = F('PRICE'),
                                             images = F('IMAGES')  
                                           )\
-                                 .values('name','price','images'))[-1]
+                                 .values('product_id','name','price','images'))[-1]
     res['sibling_product'] = {
+                              'product_id':sibling['product_id'],
                               'name':sibling['name'],
                               'price':sibling['price'],
                               'images':sibling['images'].split('|')[0]
@@ -195,6 +200,37 @@ def adminProductDetail(request):
         'review': "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat velit atque labore laboriosam. Deserunt accusantium fugit vero dolorum assumenda minus nobis cumque sequi quas qui, tempore, nisi aperiam debitis, quo itaque ",
       },
     ]
-    res['productList'] = product_view.objects.values_list('PRODUCT_NAME',flat=True)
+    productList = product_view.objects.annotate(product_id = F('PRODUCT_ID'),
+                                                name = F('PRODUCT_NAME'),
+                                                images = F('IMAGES'),
+                                                price = F('PRICE') )\
+                                      .values('product_id','name','images','price')
+    productList = pd.DataFrame(list(productList))
+    productList['images'] = productList['images'].str.split('|').str[0]
+    productList['price'] = productList['price'].str.split('|').str[0]
+    res['productList'] = productList.to_dict(orient='records')
     res['reviews'] = reviews
     return Response(res)
+
+@api_view(['POST'])
+def adminProductUpdate(request,format=None):
+  data = (request.data)['data']
+  name = data['name']
+  status = data['status']
+  category = data['category']
+  hsn = data['hsn']
+  meta_field = data['meta_field']
+  variants = data['variants']
+  nutritional_info = data['nutritional_info']
+  sibling_product = data['sibling_product']
+
+  print('name : ',name,'\n')
+  print('status : ',status,'\n')
+  print('category : ',category,'\n')
+  print('hsn : ',hsn,'\n')
+  print('meta_field : ',meta_field,'\n')
+  print('variants : ',variants,'\n')
+  print('nutritional_info : ',nutritional_info,'\n')
+  print('sibling_product : ',sibling_product,'\n')
+
+  return Response(data)

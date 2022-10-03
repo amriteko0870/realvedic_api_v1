@@ -16,3 +16,10 @@ from rest_framework.response import Response
 
 # -------------------------- django views ------------------------------------------------
 
+def index(request):
+    category_view.objects.filter(CATEGORY_ID__in = ['RVC-29UEZ','RVC-QLQ59','RVC-B50IK']).update(HSN_CODE = '9100000')
+    category_view.objects.filter(CATEGORY_ID__in = ['RVC-YQALM']).update(HSN_CODE = '11010000')
+    category_view.objects.filter(CATEGORY_ID__in = ['RVC-VP3YX']).update(HSN_CODE = '19024000')
+    category_view.objects.filter(CATEGORY_ID__in = ['RVC-HEGTG']).update(HSN_CODE = '21060000')
+    category_view.objects.filter(CATEGORY_ID__in = ['RVC-24MC3']).update(HSN_CODE = '21069099')
+    return HttpResponse('Hello')

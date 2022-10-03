@@ -42,6 +42,7 @@ class category_view(models.Model):
     CATEGORY_NAME = models.CharField(max_length=300)
     COLOR_CODE = models.CharField(max_length=300)
     IMAGES = models.CharField(max_length=300)
+    HSN_CODE = models.CharField(max_length=300)
 
 class log_records(models.Model):
     log_time = models.CharField(max_length=300)

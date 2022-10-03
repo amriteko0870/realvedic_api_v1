@@ -11,6 +11,8 @@ from django.conf.urls.static import static
 admin_urls = [
     path('adminProductList',ad_views.adminProductList,name='adminProductList'),
     path('adminProductDetail',ad_views.adminProductDetail,name='adminProductDetail'),
+    path('adminProductUpdate',ad_views.adminProductUpdate,name='adminProductUpdate'),
+    
 ]
 
 user_urls = [
@@ -21,7 +23,7 @@ user_urls = [
 
 
 urlpatterns = [
-        # path('index',views.index,name='index')
+        path('',views.index,name='index')
 ]+admin_urls\
  +user_urls\
  +static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
